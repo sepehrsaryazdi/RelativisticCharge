@@ -29,13 +29,14 @@ class Charge:
         self.active = False
         
     def update_clock(self):
-        self.update_position(self.previous_positions[-1])
-        # for i in range(10):
-        #     self.update_position(self.previous_positions[-1])
+        #self.update_position(self.previous_positions[-1])
+        for i in range(10):
+            self.update_position(self.previous_positions[-1])
+            self.index+=1
         if self.index < self.max_num_history-9:
             self.index+=10
-        if self.index > self.max_num_history - 8 and self.index < self.max_num_history-1:
-            self.index+=1
+        # if self.index > self.max_num_history - 8 and self.index < self.max_num_history-1:
+        #     self.index+=1
             #print(self.electric_field(*self.previous_positions[-1]))
             
         
@@ -87,7 +88,7 @@ class Visualise(tk.Frame):
         self.c = 10000
         self.d = 0.005
         self.initial_points = [np.array([np.random.uniform(-1,1),0]) for i in range(self.num_charges)]
-        self.charges = [Charge(self.initial_points[i], 2*np.random.random()-1, self.d, self.c) for i in range(self.num_charges)]
+        self.charges = [Charge(self.initial_points[i], 2*int(np.random.random())-1, self.d, self.c) for i in range(self.num_charges)]
         self.updating_pos = False
         self.selected_charge = None
         self.xlim = [-1,1]
