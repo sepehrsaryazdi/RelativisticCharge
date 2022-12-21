@@ -61,7 +61,7 @@ class Charge:
         f = self.create_norm_lambda_function(r)
         effective_centre = fsolve(f, np.array([0,0]))
         if np.square(r-effective_centre).sum(0) != 0:
-            E = self.k*self.charge/(np.square(r-effective_centre).sum(0)) * (effective_centre - r)
+            E = self.k*self.charge/(np.square(r-effective_centre).sum(0)) * (r-effective_centre)
         else:
             E = np.array([0,0])
        
