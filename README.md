@@ -12,9 +12,11 @@ Note the equation above is ignoring magnetic field effects.
 
 How it works:
 
-1. Simply run the following in the main git repository:
+1. Simply run the following in a desired storage location:
 
 ```
+git clone https://github.com/sepehrsaryazdi/RelativisticCharge.git
+cd RelativisticCharge
 pip3 install matplotlib numpy scipy
 python3 main.py
 ```
