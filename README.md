@@ -12,11 +12,9 @@ Note the equation above is ignoring magnetic field effects.
 
 How it works:
 
-1. Simply run the following in a desired folder:
+1. Simply run the following in the main git repository:
 
 ```
-git clone https://github.com/sepehrsaryazdi/RelativisticCharge.git
-cd RelativisticCharge
 pip3 install matplotlib numpy scipy
 python3 main.py
 ```
@@ -29,4 +27,9 @@ python3 main.py
 
 ![Charge Moved](screenshot2.png)
 
-4. The program is relatively slow because of Matplotlib's plotting library; speed-ups can be made using better plotting techniques including caching.
+4. Restarting the program will randomly choose the charges, such as opposite charges:
+
+![Opposite Polarity](screenshot3.png)
+
+
+5. The program is relatively slow because of Matplotlib's plotting library; speed-ups can be made using better plotting techniques including caching.
