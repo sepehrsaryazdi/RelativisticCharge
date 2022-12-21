@@ -24,10 +24,11 @@ class Visualise(tk.Frame):
         self.root.title('Relativistic Charge Visualisation')
         self.root.geometry("1280x520")
         super().__init__(self.root)
-        self.num_charges = 1
+        self.num_charges = 2
         self.initial_points = [np.array([np.random.uniform(-1,1),0]) for i in range(self.num_charges)]
         self.charges = [Charge(self.initial_points[i]) for i in range(self.num_charges)]
         self.updating_pos = False
+        self.selected_charge = None
         self.figure = plt.Figure(figsize=(7, 5), dpi=100)
         self.figure.canvas.mpl_connect('motion_notify_event', lambda e: self.update_charge_pos(e))
         self.figure.canvas.mpl_connect('button_press_event', lambda e: self.toggle_updating(e))
@@ -57,19 +58,31 @@ class Visualise(tk.Frame):
         if not self.updating_pos:
             for q in self.charges:
                 q.updating_pos = False
+            self.selected_charge = False
 
     def update_charge_pos(self, event):
         x_matplot = event.xdata
         y_matplot = event.ydata
         
         x = np.array([x_matplot,y_matplot])
-        for q in self.charges:
-            if self.updating_pos or q.updating_pos:
-                #print(np.linalg.norm(np.array([x_matplot,y_matplot])-q.previous_positions[-1]))
-                if np.linalg.norm(x-q.previous_positions[-1]) < 0.5:
-                    q.updating_pos = True
-                q.update_position(x)
-                self.draw_charge_positions()
+
+        if not self.updating_pos:
+            return
+
+        if self.selected_charge:
+            self.selected_charge.update_position(x)
+            self.draw_charge_positions()
+            return
+        
+        distances = [np.linalg.norm(x-q.previous_positions[-1]) for q in self.charges]
+        closest_charge = self.charges[np.argmin(distances)]
+        
+        if min(distances) < 0.5:
+            closest_charge.updating_pos = True
+            self.selected_charge = closest_charge
+            
+        closest_charge.update_position(x)
+        self.draw_charge_positions()
 
 
                     
