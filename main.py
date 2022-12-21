@@ -88,7 +88,7 @@ class Visualise(tk.Frame):
         self.c = 10000
         self.d = 0.005
         self.initial_points = [np.array([np.random.uniform(-1,1),0]) for i in range(self.num_charges)]
-        self.charges = [Charge(self.initial_points[i], 2*int(np.random.random())-1, self.d, self.c) for i in range(self.num_charges)]
+        self.charges = [Charge(self.initial_points[i], 2*np.round(np.random.random())-1, self.d, self.c) for i in range(self.num_charges)]
         self.updating_pos = False
         self.selected_charge = None
         self.xlim = [-1,1]
