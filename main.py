@@ -1,44 +1,37 @@
 import tkinter as tk
 from threading import Thread
 import matplotlib.pyplot as plt
+from matplotlib.path import Path
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from collections import deque
 import time
 from scipy.optimize import fsolve
 import matplotlib.style as mplstyle
-mplstyle.use('fast')
+mplstyle.use(['dark_background', 'ggplot', 'fast'])
 
 
 class Charge:
-    def __init__(self, x0, charge, visualisation):
+    def __init__(self, x0, charge,d,c):
         assert len(x0) == 2
-        self.max_num_history = 100
+        self.max_num_history = 500
         self.previous_positions = deque([x0]*self.max_num_history)
         self.updating_pos = False
         self.charge = charge
-        self.c = 10
-        self.d = 0.05
         self.k = 1
-        self.visualisation = visualisation
+        self.d = d
+        self.c = c
+        self.color = "blue" if charge > 0 else "red"
         self.index = self.max_num_history-1
-        self.active = True
-        self.clock_update_thread = Thread(target=self.update_clock)
-        self.clock_update_thread.start()
+        
     
     def destroy(self):
         self.active = False
         
     def update_clock(self):
-        while self.active:
-            if self.index < self.max_num_history - 1:
-                self.index+=1
-            time.sleep(self.d/self.c)
-            try:
-                self.update_position(self.previous_positions[-1])
-                self.visualisation.draw_updates()
-            except:
-                continue
+        self.update_position(self.previous_positions[-1])
+        if self.index < self.max_num_history - 10:
+            self.index+=10
             #print(self.electric_field(*self.previous_positions[-1]))
             
         
@@ -86,15 +79,21 @@ class Visualise(tk.Frame):
         self.root.title('Relativistic Charge Visualisation')
         self.root.geometry("1280x520")
         super().__init__(self.root)
-        self.num_charges = 1
+        self.num_charges = 2
+        self.c = 10000
+        self.d = 0.005
         self.initial_points = [np.array([np.random.uniform(-1,1),0]) for i in range(self.num_charges)]
-        self.charges = [Charge(self.initial_points[i], 2*np.random.random()-1, self) for i in range(self.num_charges)]
+        self.charges = [Charge(self.initial_points[i], 2*np.random.random()-1, self.d, self.c) for i in range(self.num_charges)]
         self.updating_pos = False
         self.selected_charge = None
         self.xlim = [-1,1]
-        self.ylim = [-1,1]
+        self.ylim = [-1,1]        
+        self.active = True
+
+        
         self.num_vectors = 20
         self.arrow_scale = 0.1
+        
 
         x = np.linspace(*self.xlim, self.num_vectors)
         y = np.linspace(*self.ylim, self.num_vectors)
@@ -109,8 +108,17 @@ class Visualise(tk.Frame):
         self.chart_type = FigureCanvasTkAgg(self.figure, self.root)
         self.chart_type.get_tk_widget().pack()
         self.draw_updates()
+        self.clock_update_thread = Thread(target=self.update_clock)
+        self.clock_update_thread.start()
         # self.ax.plot(np.linspace(0,1,5), np.linspace(0,1,5))
     
+    def update_clock(self):
+        while self.active:
+            for q in self.charges:
+                q.update_clock()
+            self.draw_updates()
+            #time.sleep(self.d/self.c)
+
     def draw_updates(self):
         self.ax.clear()
         self.ax.set_xlim(*self.xlim)
@@ -120,6 +128,7 @@ class Visualise(tk.Frame):
         self.draw_net_vector_field()
         self.chart_type.draw()
         self.chart_type.draw()
+        
 
     def get_net_electric_field(self, r):
         E = np.array([0.,0.])
@@ -139,9 +148,7 @@ class Visualise(tk.Frame):
         
         
         for q in self.charges:
-            #self.ax.set_title(f"{q.previous_positions[-1]}")
-            self.ax.scatter(*q.previous_positions[-1])
-        
+            self.ax.scatter(*q.previous_positions[-1], c=q.color)
     
 
     def toggle_updating(self, event):
@@ -157,18 +164,21 @@ class Visualise(tk.Frame):
         
         x = np.array([x_matplot,y_matplot])
 
+
+
         if not self.updating_pos:
             return
 
+        
+
         if self.selected_charge:
             self.selected_charge.update_position(x)
-            self.draw_updates()
             return
         
         distances = [np.linalg.norm(x-q.previous_positions[-1]) for q in self.charges]
         closest_charge = self.charges[np.argmin(distances)]
         
-        if min(distances) < 0.5:
+        if min(distances) < 1:
             closest_charge.updating_pos = True
             self.selected_charge = closest_charge
             
@@ -176,8 +186,7 @@ class Visualise(tk.Frame):
         self.draw_charge_positions()
     
     def destroy(self):
-        for q in self.charges:
-            q.destroy()
+        self.active = False
 
 visualisation = Visualise()
 
