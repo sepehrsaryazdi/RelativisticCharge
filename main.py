@@ -29,8 +29,9 @@ class Charge:
         self.active = False
         
     def update_clock(self):
-        self.update_position(self.previous_positions[-1])
-        if self.index < self.max_num_history - 10:
+        for i in range(10):
+            self.update_position(self.previous_positions[-1])
+        if self.index < self.max_num_history-9:
             self.index+=10
             #print(self.electric_field(*self.previous_positions[-1]))
             
@@ -79,7 +80,7 @@ class Visualise(tk.Frame):
         self.root.title('Relativistic Charge Visualisation')
         self.root.geometry("1280x520")
         super().__init__(self.root)
-        self.num_charges = 2
+        self.num_charges = 1
         self.c = 10000
         self.d = 0.005
         self.initial_points = [np.array([np.random.uniform(-1,1),0]) for i in range(self.num_charges)]
@@ -116,8 +117,8 @@ class Visualise(tk.Frame):
         while self.active:
             for q in self.charges:
                 q.update_clock()
+            
             self.draw_updates()
-            #time.sleep(self.d/self.c)
 
     def draw_updates(self):
         self.ax.clear()
