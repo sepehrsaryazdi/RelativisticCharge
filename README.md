@@ -18,7 +18,7 @@ How it works:
 git clone https://github.com/sepehrsaryazdi/RelativisticCharge.git
 cd RelativisticCharge
 pip3 install matplotlib numpy scipy
-python3 main.py
+python3.8 main.py
 ```
 2. The program will randomly generate two charges of any polarity `+1` or `-1` and draws their electric field.
 
