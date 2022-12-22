@@ -82,7 +82,7 @@ class Visualise(tk.Frame):
     def __init__(self):
         self.root = tk.Tk()
         self.root.title('Relativistic Charge Visualisation')
-        self.root.geometry("1280x520")
+        self.root.geometry("800x800")
         super().__init__(self.root)
         self.num_charges = 2
         self.c = 10000
@@ -105,7 +105,7 @@ class Visualise(tk.Frame):
         x,y = np.meshgrid(x,y)
         self.vector_points = np.array([x.flatten(), y.flatten()]).T
 
-        self.figure = plt.Figure(figsize=(9, 5), dpi=100)
+        self.figure = plt.Figure(figsize=(9, 9), dpi=100)
         self.figure.canvas.mpl_connect('motion_notify_event', lambda e: self.update_charge_pos(e))
         self.figure.canvas.mpl_connect('button_press_event', lambda e: self.toggle_updating(e))
         self.figure.canvas.mpl_connect('button_release_event', lambda e: self.toggle_updating(e))
