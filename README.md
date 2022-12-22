@@ -12,7 +12,7 @@ Note the equation above is ignoring magnetic field effects.
 
 How it works:
 
-1. Simply run the following in a desired storage location:
+1. Simply run the following in a desired storage location using `Python 3.8`:
 
 ```
 git clone https://github.com/sepehrsaryazdi/RelativisticCharge.git
