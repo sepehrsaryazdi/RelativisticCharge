@@ -35,3 +35,6 @@ python3.8 main.py
 
 
 5. The program is relatively slow because of Matplotlib's plotting library; speed-ups can be made using better plotting techniques including caching.
+
+6. A Desmos implementation is available here:
+1[Relativistic Charge - Desmos](https://www.desmos.com/calculator/7kmp2s1vg1)
