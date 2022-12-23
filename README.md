@@ -38,4 +38,4 @@ python3.8 main.py
 
 6. A Desmos implementation is available here:
 
-![Relativistic Charge - Desmos](https://www.desmos.com/calculator/7kmp2s1vg1)
+[Relativistic Charge - Desmos](https://www.desmos.com/calculator/7kmp2s1vg1)
