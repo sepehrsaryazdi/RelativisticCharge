@@ -7,8 +7,10 @@ This is a quick project that visualises the relativistic electric field generate
 <img src="equation.png" width="400">
 </p>
 
-
 Note the equation above is ignoring magnetic field effects.
+
+![Example](usage.gif)
+
 
 How it works:
 
